@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Última Noite</title>
+
+    <!-- FONTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* =========================
+           CONFIGURAÇÕES GERAIS
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #050505;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            font-family: Arial, sans-serif;
+
+            position: relative;
+        }
+
+
+        /* =========================
+           TEXTURA
+        ========================= */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: 0.18;
+
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 3px,
+                    #ffffff08 4px
+                );
+
+            z-index: 10;
+        }
+
+
+        /* =========================
+           MANCHAS DE TINTA
+        ========================= */
+
+        .splash {
+            position: fixed;
+
+            border-radius: 50%;
+
+            filter: blur(1px);
+
+            opacity: 0.8;
+
+            pointer-events: none;
+        }
+
+        .red1 {
+            width: 400px;
+            height: 400px;
+
+            background: #e00000;
+
+            top: -250px;
+            left: -150px;
+        }
+
+        .red2 {
+            width: 300px;
+            height: 300px;
+
+            background: #ff0000;
+
+            right: -150px;
+            bottom: -100px;
+        }
+
+        .yellow1 {
+            width: 250px;
+            height: 250px;
+
+            background: #ffd900;
+
+            left: -130px;
+            bottom: 100px;
+        }
+
+        .yellow2 {
+            width: 200px;
+            height: 200px;
+
+            background: #ffcc00;
+
+            right: -100px;
+            top: 100px;
+        }
+
+
+        /* =========================
+           RABISCOS
+        ========================= */
+
+        .scribble {
+            position: fixed;
+
+            color: #e00000;
+
+            font-family: "Permanent Marker", cursive;
+
+            font-size: 90px;
+
+            opacity: 0.35;
+
+            transform: rotate(-15deg);
+
+            pointer-events: none;
+        }
+
+        .s1 {
+            left: 2%;
+            top: 25%;
+        }
+
+        .s2 {
+            right: 2%;
+            bottom: 15%;
+
+            color: #ffd900;
+
+            transform: rotate(20deg);
+        }
+
+
+        /* =========================
+           CONTAINER PRINCIPAL
+        ========================= */
+
+        .container {
+
+            position: relative;
+
+            min-height: 100vh;
+
+            padding: 25px 6%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            z-index: 2;
+        }
+
+
+        /* =========================
+           MENU
+        ========================= */
+
+        nav {
+
+            position: absolute;
+
+            top: 25px;
+
+            left: 6%;
+            right: 6%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .logo {
+
+            font-family: "Permanent Marker", cursive;
+
+            color: #ffcc00;
+
+            font-size: 24px;
+
+            transform: rotate(-4deg);
+        }
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 35px;
+        }
+
+        .nav-links span {
+
+            font-family: "Permanent Marker", cursive;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .nav-links span:hover {
+
+            color: #ff0000;
+
+            transform: rotate(-5deg);
+        }
+
+
+        /* =========================
+           AVISO
+        ========================= */
+
+        .warning {
+
+            font-family: "Permanent Marker", cursive;
+
+            color: #ffd900;
+
+            font-size: 20px;
+
+            transform: rotate(-3deg);
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           FRASE PRINCIPAL
+        ========================= */
+
+        .question {
+
+            max-width: 1000px;
+
+            text-align: center;
+
+            font-family: "Rubik Mono One", sans-serif;
+
+            font-size: clamp(45px, 8vw, 105px);
+
+            line-height: 0.86;
+
+            text-transform: uppercase;
+
+            transform: rotate(-2deg);
+
+            text-shadow:
+                7px 7px 0 #e00000,
+                -4px -3px 0 #ffd900;
+
+            margin-bottom: 45px;
+        }
+
+        .question span:nth-child(1) {
+
+            color: white;
+        }
+
+        .question span:nth-child(2) {
+
+            color: #ffd900;
+        }
+
+        .question span:nth-child(3) {
+
+            color: #e00000;
+        }
+
+
+        /* =========================
+           CONTAGEM REGRESSIVA
+        ========================= */
+
+        .countdown {
+
+            display: flex;
+
+            gap: 12px;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+
+            min-width: 125px;
+
+            padding: 12px 18px;
+
+            background: #090909;
+
+            border: 3px solid white;
+
+            box-shadow:
+                8px 8px 0 #e00000,
+                -5px -5px 0 #ffd900;
+
+            transform: rotate(1deg);
+        }
+
+        .time-box:nth-child(2) {
+
+            transform: rotate(-2deg);
+        }
+
+        .time-box:nth-child(3) {
+
+            transform: rotate(2deg);
+        }
+
+        .time-box:nth-child(4) {
+
+            transform: rotate(-1deg);
+        }
+
+        .number {
+
+            font-family: "Bebas Neue", sans-serif;
+
+            font-size: 65px;
+
+            line-height: 0.8;
+
+            display: block;
+
+            text-align: center;
+        }
+
+        .label {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 10px;
+
+            font-family: "Permanent Marker", cursive;
+
+            font-size: 14px;
+
+            color: #e00000;
+        }
+
+
+        /* =========================
+           DATA DO EVENTO
+        ========================= */
+
+        .date {
+
+            margin-top: 35px;
+
+            font-family: "Permanent Marker", cursive;
+
+            font-size: 24px;
+
+            color: white;
+
+            border-bottom: 5px solid #ffd900;
+
+            padding-bottom: 5px;
+
+            transform: rotate(-2deg);
+        }
+
+
+        /* =========================
+           FRASES ESPALHADAS
+        ========================= */
+
+        .phrase {
+
+            position: absolute;
+
+            font-family: "Permanent Marker", cursive;
+
+            font-size: 18px;
+
+            max-width: 160px;
+
+            line-height: 1.2;
+        }
+
+        .p1 {
+
+            left: 5%;
+            top: 38%;
+
+            color: #ffd900;
+
+            transform: rotate(-10deg);
+        }
+
+        .p2 {
+
+            right: 5%;
+            top: 45%;
+
+            color: #e00000;
+
+            transform: rotate(8deg);
+        }
+
+        .p3 {
+
+            left: 8%;
+            bottom: 12%;
+
+            color: white;
+
+            transform: rotate(5deg);
+        }
+
+        .p4 {
+
+            right: 7%;
+            bottom: 10%;
+
+            color: #ffd900;
+
+            transform: rotate(-8deg);
+        }
+
+
+        /* =========================
+           RESPONSIVIDADE MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            nav {
+
+                position: relative;
+
+                top: auto;
+                left: auto;
+                right: auto;
+
+                width: 100%;
+
+                margin-bottom: 60px;
+            }
+
+            .nav-links {
+
+                display: none;
+            }
+
+            .question {
+
+                font-size: 48px;
+            }
+
+            .time-box {
+
+                min-width: 75px;
+
+                padding: 10px;
+            }
+
+            .number {
+
+                font-size: 45px;
+            }
+
+            .label {
+
+                font-size: 11px;
+            }
+
+            .phrase {
+
+                display: none;
+            }
+
+            .date {
+
+                font-size: 19px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         MANCHAS
+    ========================= -->
+
+    <div class="splash red1"></div>
+
+    <div class="splash red2"></div>
+
+    <div class="splash yellow1"></div>
+
+    <div class="splash yellow2"></div>
+
+
+    <!-- =========================
+         RABISCOS
+    ========================= -->
+
+    <div class="scribble s1">
+        ✕
+    </div>
+
+    <div class="scribble s2">
+        ?
+    </div>
+
+
+    <!-- =========================
+         CONTAINER
+    ========================= -->
+
+    <div class="container">
+
+
+        <!-- MENU -->
+
+        <nav>
+
+            <div class="logo">
+                ÚLTIMA NOITE_
+            </div>
+
+            <div class="nav-links">
+
+                <span>
+                    O QUE É?
+                </span>
+
+                <span>
+                    MEMÓRIAS
+                </span>
+
+                <span>
+                    ESCOLHAS
+                </span>
+
+                <span>
+                    CONTATO
+                </span>
+
+            </div>
+
+        </nav>
+
+
+        <!-- =========================
+             FRASES LATERAIS
+        ========================= -->
+
+        <div class="phrase p1">
+
+            NÃO EXISTE
+            <br>
+
+            PLANO B.
+
+        </div>
+
+
+        <div class="phrase p2">
+
+            AMANHÃ
+            <br>
+
+            NÃO É
+            <br>
+
+            GARANTIDO.
+
+        </div>
+
+
+        <div class="phrase p3">
+
+            FAÇA
+            <br>
+
+            VALER.
+
+        </div>
+
+
+        <div class="phrase p4">
+
+            SÓ EXISTE
+            <br>
+
+            AGORA.
+
+        </div>
+
+
+        <!-- =========================
+             AVISO
+        ========================= -->
+
+        <div class="warning">
+
+            // O TEMPO ESTÁ ACABANDO //
+
+        </div>
+
+
+        <!-- =========================
+             FRASE PRINCIPAL
+        ========================= -->
+
+        <h1 class="question">
+
+            <span>
+                ONDE VOCÊ
+            </span>
+
+            <br>
+
+            <span>
+                ESTARIA NA
+            </span>
+
+            <br>
+
+            <span>
+                ÚLTIMA NOITE
+            </span>
+
+            <br>
+
+            DA SUA VIDA?
+
+        </h1>
+
+
+        <!-- =========================
+             CONTADOR
+        ========================= -->
+
+        <div class="countdown">
+
+
+            <!-- DIAS -->
+
+            <div class="time-box">
+
+                <span
+                    class="number"
+                    id="days">
+                    00
+                </span>
+
+                <span class="label">
+                    DIAS
+                </span>
+
+            </div>
+
+
+            <!-- HORAS -->
+
+            <div class="time-box">
+
+                <span
+                    class="number"
+                    id="hours">
+                    00
+                </span>
+
+                <span class="label">
+                    HORAS
+                </span>
+
+            </div>
+
+
+            <!-- MINUTOS -->
+
+            <div class="time-box">
+
+                <span
+                    class="number"
+                    id="minutes">
+                    00
+                </span>
+
+                <span class="label">
+                    MINUTOS
+                </span>
+
+            </div>
+
+
+            <!-- SEGUNDOS -->
+
+            <div class="time-box">
+
+                <span
+                    class="number"
+                    id="seconds">
+                    00
+                </span>
+
+                <span class="label">
+                    SEGUNDOS
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             DATA
+        ========================= -->
+
+        <div class="date">
+
+            14 / 08 / 2026 — 12:00
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+
+        /*
+         * ========================================
+         * DATA FINAL DA CONTAGEM
+         * ========================================
+         *
+         * 14 DE AGOSTO DE 2026
+         * ÀS 12:00
+         *
+         */
+
+        const targetDate =
+            new Date("2026-08-14T12:00:00");
+
+
+        /*
+         * ========================================
+         * FUNÇÃO DA CONTAGEM
+         * ========================================
+         */
+
+        function updateCountdown() {
+
+
+            // Horário atual
+
+            const now =
+                new Date();
+
+
+            // Diferença entre o evento e agora
+
+            const difference =
+                targetDate - now;
+
+
+            /*
+             * ====================================
+             * QUANDO A CONTAGEM TERMINAR
+             * ====================================
+             */
+
+            if (difference <= 0) {
+
+
+                document
+                    .getElementById("days")
+                    .textContent = "00";
+
+
+                document
+                    .getElementById("hours")
+                    .textContent = "00";
+
+
+                document
+                    .getElementById("minutes")
+                    .textContent = "00";
+
+
+                document
+                    .getElementById("seconds")
+                    .textContent = "00";
+
+
+                document
+                    .querySelector(".warning")
+                    .textContent =
+                    "// A ÚLTIMA NOITE CHEGOU //";
+
+
+                return;
+
+            }
+
+
+            /*
+             * ====================================
+             * CÁLCULO DOS DIAS
+             * ====================================
+             */
+
+            const days =
+                Math.floor(
+                    difference /
+                    (1000 * 60 * 60 * 24)
+                );
+
+
+            /*
+             * ====================================
+             * CÁLCULO DAS HORAS
+             * ====================================
+             */
+
+            const hours =
+                Math.floor(
+                    (difference /
+                    (1000 * 60 * 60)) % 24
+                );
+
+
+            /*
+             * ====================================
+             * CÁLCULO DOS MINUTOS
+             * ====================================
+             */
+
+            const minutes =
+                Math.floor(
+                    (difference /
+                    (1000 * 60)) % 60
+                );
+
+
+            /*
+             * ====================================
+             * CÁLCULO DOS SEGUNDOS
+             * ====================================
+             */
+
+            const seconds =
+                Math.floor(
+                    (difference / 1000) % 60
+                );
+
+
+            /*
+             * ====================================
+             * ATUALIZAÇÃO DOS NÚMEROS
+             * ====================================
+             */
+
+            document
+                .getElementById("days")
+                .textContent =
+                String(days)
+                .padStart(2, "0");
+
+
+            document
+                .getElementById("hours")
+                .textContent =
+                String(hours)
+                .padStart(2, "0");
+
+
+            document
+                .getElementById("minutes")
+                .textContent =
+                String(minutes)
+                .padStart(2, "0");
+
+
+            document
+                .getElementById("seconds")
+                .textContent =
+                String(seconds)
+                .padStart(2, "0");
+
+        }
+
+
+        /*
+         * ========================================
+         * EXECUTA IMEDIATAMENTE
+         * ========================================
+         */
+
+        updateCountdown();
+
+
+        /*
+         * ========================================
+         * ATUALIZA A CADA 1 SEGUNDO
+         * ========================================
+         */
+
+        setInterval(
+            updateCountdown,
+            1000
+        );
+
+
+    </script>
+
+
+</body>
+</html>
